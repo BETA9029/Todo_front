@@ -8,7 +8,7 @@ export const TodoAP = () => {
   const [Todos, setTodos] = useState([]);
   const [text, setText] = useState("");
 
-  const DBconect = () => {
+  const APIconect = () => {
     fetch("http://localhost:5000/")
       .then((res) => res.json())
       .then((json) => {
@@ -20,7 +20,7 @@ export const TodoAP = () => {
 
   //初回描画時のみローカルストレージからデータをロードし、ステートに保存
   useEffect(() => {
-    DBconect();
+    APIconect();
   }, []);
 
   //Todosのステートにinputコンポから受け取った入力データをステートに追加する
@@ -38,7 +38,7 @@ export const TodoAP = () => {
     })
       .then((res) => res.json())
       .then((json) => console.log(json))
-      .then(() => DBconect())
+      .then(() => APIconect())
       .catch(() => alert("error"));
   };
 
@@ -58,7 +58,7 @@ export const TodoAP = () => {
     })
       .then((res) => res.json())
       .then((json) => console.log(json))
-      .then(() => DBconect())
+      .then(() => APIconect())
       .catch(() => alert("error"));
   };
 
@@ -74,7 +74,7 @@ export const TodoAP = () => {
     })
       .then((res) => res.json())
       .then((json) => console.log(json))
-      .then(() => DBconect())
+      .then(() => APIconect())
       .catch(() => alert("error"));
   };
 
