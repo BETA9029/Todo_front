@@ -6,22 +6,27 @@ export default function CreateTodo({
   DeleteTodo = (f) => f,
 }) {
   return (
-    <p className="panel-block">
-      <label>
-        <input
-          type="checkbox"
-          checked={todo.done}
-          onChange={() => onCheck({ ...todo, done: !todo.done })}
-        />
-        <span className={todo.done ? "has-text-grey-light" : ""}>
-          {todo.todo}
-        </span>
-      </label>
-      <button
-        type="submit"
-        className="delete"
-        onClick={() => DeleteTodo(todo)}
-      ></button>
-    </p>
+    <div className="panel-block columns">
+      <div className="field is-10 column">
+        <label className="label">
+          <input
+            type="checkbox"
+            checked={todo.done}
+            onChange={() => onCheck({ ...todo, done: !todo.done })}
+          />
+          <span className={todo.done ? "has-text-grey-light" : ""}>
+            {todo.todo}
+          </span>
+        </label>
+      </div>
+
+      <div className="column">
+        <button
+          type="submit"
+          className="delete"
+          onClick={() => DeleteTodo(todo)}
+        ></button>
+      </div>
+    </div>
   );
 }

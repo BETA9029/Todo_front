@@ -25,3 +25,17 @@ export default function useAuth() {
   }, [navigate]);
   return LoginUser;
 }
+
+try {
+  const decode = jwt_Decode(token);
+  console.log("email " + decode.email);
+  setTodos(APIconect(decode.email));
+  console.log("state " + email);
+  if (!email) {
+    navigate("/user/login");
+    return;
+  }
+} catch {
+  navigate("/user/login");
+  return;
+}

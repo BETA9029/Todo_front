@@ -1,46 +1,39 @@
 import InputTodo from "./InputTodo";
 import CreateTodo from "./createTodo";
-import useAuth from "./Auth";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import jwt_Decode from "jwt-decode";
 import "react-native-get-random-values";
 import "bulma/css/bulma.css";
 
 export default function Todo() {
   const [Todos, setTodos] = useState([]);
   const [text, setText] = useState("");
-  const [email, setEmail] = useState("a");
+  const [email, setEmail] = useState({});
   const navigate = useNavigate();
 
   const APIconect = () => {
-    fetch(`http://localhost:5000/${email}`)
+    fetch("http://localhost:5000", {
+      method: "GET",
+      headers: {
+        Accept: "aplication/json",
+        "Content-Type": "application/json",
+        token: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
       .then((res) => res.json())
       .then((json) => {
-        json.alltodo && setTodos(json.alltodo);
-        console.log(json);
+        setEmail(json.email);
+        setTodos(json.alltodo);
       })
-      .catch(() => alert("error_APICONECT"));
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   //初回描画時のみローカルストレージからデータをロードし、ステートに保存
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      navigate("/user/login");
-      return;
-    }
-    try {
-      const decode = jwt_Decode(token);
-      setEmail(decode.email);
-      console.log(email);
-      if (!email) {
-        localStorage.removeItem("token");
-        navigate("/user/login");
-        return;
-      }
-    } catch {
-      localStorage.removeItem("token");
       navigate("/user/login");
       return;
     }
@@ -103,10 +96,22 @@ export default function Todo() {
       .then(() => APIconect())
       .catch(() => alert("error"));
   };
-  // useAuth();
 
   return (
     <div>
+      <div>
+        <h3 className="has-text-centered">TODO</h3>
+      </div>
+
+      <div className="buttons is-right">
+        <button
+          className="button is-primary"
+          onClick={() => navigate("/user/login")}
+        >
+          ログアウト
+        </button>
+      </div>
+
       <InputTodo AddTodos={AddTodos} text={text} setText={setText} />
       {Todos.map((todos) => (
         <CreateTodo

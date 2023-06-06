@@ -1,12 +1,20 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = () => {
+  useEffect(() => {
+    localStorage.removeItem("token");
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!email) return;
+    if (!password) return;
+
     fetch("http://localhost:5000/user/login", {
       method: "POST",
       headers: {
@@ -18,35 +26,61 @@ export default function Login() {
         password: password,
       }),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        setPassword("");
+        if (!res.ok) throw new Error();
+        return res.json();
+      })
       .then((json) => localStorage.setItem("token", json.token))
       .then(() => navigate("/"))
-      .catch((err) => alert("ログインに失敗"));
+      .catch((err) => alert("メールアドレスまたはパスワードが違います"));
   };
 
   return (
     <div>
-      <h1>ログイン</h1>
+      <div>
+        <h3 className="has-text-centered">ログイン</h3>
+      </div>
 
-      <input
-        type="text"
-        name={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="メールアドレス"
-        required
-      />
+      <div className="buttons is-right">
+        <button className="button is-primary">
+          <Link to="/user/register">新規登録</Link>
+        </button>
+      </div>
 
-      <input
-        type="text"
-        name={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="パスワード"
-        required
-      />
+      <form onSubmit={(e) => handleSubmit(e)} className="box">
+        <div className="field">
+          <label className="label">
+            メールアドレス
+            <input
+              className="input"
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="メールアドレス"
+            />
+          </label>
+        </div>
 
-      <button type="submit" className="register" onClick={() => handleSubmit()}>
-        ログイン
-      </button>
+        <div className="field">
+          <label className="label">
+            パスワード
+            <input
+              className="input"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="パスワード"
+            />
+          </label>
+        </div>
+
+        <div className="buttons is-right panel-block">
+          <button className="button is-primary is-fullwidth" type="submit">
+            ログイン
+          </button>
+        </div>
+      </form>
     </div>
   );
 }

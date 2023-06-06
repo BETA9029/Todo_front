@@ -7,7 +7,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <div className="panel is-primary">
-        <h1 className="panel-heading has-text-centered">TODO</h1>
+        <h1 className="panel-heading has-text-centered">TODOアプリ</h1>
         <Routes>
           <Route path="/user/login" element={<Login />} />
           <Route path="/user/register" element={<Register />} />

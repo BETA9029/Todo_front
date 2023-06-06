@@ -1,11 +1,18 @@
 import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!name) return;
+    if (!email) return;
+    if (!password) return;
+
     fetch("http://localhost:5000/user/register", {
       method: "POST",
       headers: {
@@ -18,39 +25,73 @@ export default function Register() {
         password: password,
       }),
     })
-      .then((res) => res.json())
-      .then((json) => console.log(json))
-      .catch((err) => alert("ユーザ登録に失敗"));
+      .then((res) => {
+        setPassword("");
+        if (!res.ok) throw new Error();
+        return res.json();
+      })
+      .then(() => navigate("/user/login"))
+      .catch((err) => alert("すでに登録されているメールアドレスです。"));
   };
 
   return (
     <div>
-      <h1>ユーザ登録登録</h1>
+      <div>
+        <h3 className="has-text-centered">ユーザ登録登録</h3>
+      </div>
 
-      <input
-        type="text"
-        name={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="名前"
-        required
-      />
-      <input
-        type="text"
-        name={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="メールアドレス"
-        required
-      />
-      <input
-        type="text"
-        name={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="パスワード"
-        required
-      />
-      <button type="submit" className="register" onClick={() => handleSubmit()}>
-        登録
-      </button>
+      <div className="buttons is-right">
+        <button className="button is-primary">
+          <Link to="/user/login">ログイン</Link>
+        </button>
+      </div>
+
+      <form onSubmit={(e) => handleSubmit(e)} className="box">
+        <div className="field">
+          <label className="label">
+            名前
+            <input
+              className="input"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="名前"
+            />
+          </label>
+        </div>
+
+        <div className="field">
+          <label className="label">
+            メールアドレス
+            <input
+              className="input"
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="メールアドレス"
+            />
+          </label>
+        </div>
+
+        <div className="field">
+          <label className="label">
+            パスワード
+            <input
+              className="input"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="パスワード"
+            />
+          </label>
+        </div>
+
+        <div className="buttons is-right panel-block">
+          <button className="button is-primary is-fullwidth" type="submit">
+            登録
+          </button>
+        </div>
+      </form>
     </div>
   );
 }
