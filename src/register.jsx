@@ -1,5 +1,6 @@
+import Header from "./Header";
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -36,15 +37,7 @@ export default function Register() {
 
   return (
     <div>
-      <div>
-        <h3 className="has-text-centered">ユーザ登録登録</h3>
-      </div>
-
-      <div className="buttons is-right">
-        <button className="button is-primary">
-          <Link to="/user/login">ログイン</Link>
-        </button>
-      </div>
+      <Header title="新規登録" linkName="ログイン" link="/user/login" />
 
       <form onSubmit={(e) => handleSubmit(e)} className="box">
         <div className="field">

@@ -1,5 +1,6 @@
+import Header from "./Header";
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -38,15 +39,7 @@ export default function Login() {
 
   return (
     <div>
-      <div>
-        <h3 className="has-text-centered">ログイン</h3>
-      </div>
-
-      <div className="buttons is-right">
-        <button className="button is-primary">
-          <Link to="/user/register">新規登録</Link>
-        </button>
-      </div>
+      <Header title="ログイン" linkName="新規登録" link="/user/register" />
 
       <form onSubmit={(e) => handleSubmit(e)} className="box">
         <div className="field">

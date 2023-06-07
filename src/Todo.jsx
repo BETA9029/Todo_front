@@ -1,8 +1,9 @@
 import InputTodo from "./InputTodo";
 import CreateTodo from "./createTodo";
+import Header from "./Header";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "react-native-get-random-values";
+//import "react-native-get-random-values";
 import "bulma/css/bulma.css";
 
 export default function Todo() {
@@ -99,18 +100,7 @@ export default function Todo() {
 
   return (
     <div>
-      <div>
-        <h3 className="has-text-centered">TODO</h3>
-      </div>
-
-      <div className="buttons is-right">
-        <button
-          className="button is-primary"
-          onClick={() => navigate("/user/login")}
-        >
-          ログアウト
-        </button>
-      </div>
+      <Header title="TODO" linkName="ログアウト" link="/user/login" />
 
       <InputTodo AddTodos={AddTodos} text={text} setText={setText} />
       {Todos.map((todos) => (
