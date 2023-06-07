@@ -13,7 +13,7 @@ export default function Register() {
     if (!email) return;
     if (!password) return;
 
-    fetch("http://localhost:5000/user/register", {
+    fetch("https://todo-api-zu94.onrender.com/user/register", {
       method: "POST",
       headers: {
         Accept: "aplication/json",

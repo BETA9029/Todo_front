@@ -1,5 +1,5 @@
 const APIconect = () => {
-  fetch("http://localhost:5000", {
+  fetch("https://todo-api-zu94.onrender.com", {
     method: "GET",
     headers: {
       Accept: "aplication/json",
@@ -17,7 +17,7 @@ const APIconect = () => {
     });
 };
 const AddTodos = (Todo) => {
-  fetch("http://localhost:5000/create", {
+  fetch("https://todo-api-zu94.onrender.com/create", {
     method: "POST",
     headers: {
       Accept: "aplication/json",
@@ -37,8 +37,8 @@ const AddTodos = (Todo) => {
 
 //指定されたIDの真偽の入れ替えをした配列をステートに入れなおす
 const onCheck = (todo) => {
-  console.log(`http://localhost:5000/update/${todo._id}`);
-  fetch(`http://localhost:5000/update/${todo._id}`, {
+  console.log(`https://todo-api-zu94.onrender.com/update/${todo._id}`);
+  fetch(`https://todo-api-zu94.onrender.com/update/${todo._id}`, {
     method: "PUT",
     headers: {
       Accept: "aplication/json",
@@ -58,7 +58,7 @@ const onCheck = (todo) => {
 
 //指定されたIDのデータを削除した配列をステートに入れなおす
 const DeleteTodo = (DeleteTodo) => {
-  fetch(`http://localhost:5000/delete/${DeleteTodo._id}`, {
+  fetch(`https://todo-api-zu94.onrender.com/delete/${DeleteTodo._id}`, {
     method: "DELETE",
     headers: {
       Accept: "aplication/json",
@@ -77,7 +77,7 @@ const handleSubmit = (e) => {
   if (!email) return;
   if (!password) return;
 
-  fetch("http://localhost:5000/user/login", {
+  fetch("https://todo-api-zu94.onrender.com/user/login", {
     method: "POST",
     headers: {
       Accept: "aplication/json",
@@ -104,7 +104,7 @@ const handleSubmit2 = (e) => {
   if (!email) return;
   if (!password) return;
 
-  fetch("http://localhost:5000/user/register", {
+  fetch("https://todo-api-zu94.onrender.com/user/register", {
     method: "POST",
     headers: {
       Accept: "aplication/json",

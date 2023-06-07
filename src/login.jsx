@@ -15,7 +15,7 @@ export default function Login() {
     if (!email) return;
     if (!password) return;
 
-    fetch("http://localhost:5000/user/login", {
+    fetch("https://todo-api-zu94.onrender.com/user/login", {
       method: "POST",
       headers: {
         Accept: "aplication/json",

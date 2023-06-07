@@ -12,7 +12,7 @@ export default function Todo() {
   const navigate = useNavigate();
 
   const APIconect = () => {
-    fetch("http://localhost:5000", {
+    fetch("https://todo-api-zu94.onrender.com", {
       method: "GET",
       headers: {
         Accept: "aplication/json",
@@ -42,7 +42,7 @@ export default function Todo() {
 
   //Todosのステートにinputコンポから受け取った入力データをステートに追加する
   const AddTodos = (Todo) => {
-    fetch("http://localhost:5000/create", {
+    fetch("https://todo-api-zu94.onrender.com/create", {
       method: "POST",
       headers: {
         Accept: "aplication/json",
@@ -62,8 +62,8 @@ export default function Todo() {
 
   //指定されたIDの真偽の入れ替えをした配列をステートに入れなおす
   const onCheck = (todo) => {
-    console.log(`http://localhost:5000/update/${todo._id}`);
-    fetch(`http://localhost:5000/update/${todo._id}`, {
+    console.log(`https://todo-api-zu94.onrender.com/update/${todo._id}`);
+    fetch(`https://todo-api-zu94.onrender.com/update/${todo._id}`, {
       method: "PUT",
       headers: {
         Accept: "aplication/json",
@@ -83,7 +83,7 @@ export default function Todo() {
 
   //指定されたIDのデータを削除した配列をステートに入れなおす
   const DeleteTodo = (DeleteTodo) => {
-    fetch(`http://localhost:5000/delete/${DeleteTodo._id}`, {
+    fetch(`https://todo-api-zu94.onrender.com/delete/${DeleteTodo._id}`, {
       method: "DELETE",
       headers: {
         Accept: "aplication/json",
