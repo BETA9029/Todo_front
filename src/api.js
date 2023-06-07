@@ -1,4 +1,4 @@
-const APIconect = () => {
+const GetTodo = () => {
   fetch("https://todo-api-zu94.onrender.com", {
     method: "GET",
     headers: {
@@ -31,7 +31,7 @@ const AddTodos = (Todo) => {
   })
     .then((res) => res.json())
     .then((json) => console.log(json))
-    .then(() => APIconect())
+    .then(() => GetTodo())
     .catch(() => alert("error"));
 };
 
@@ -52,7 +52,7 @@ const onCheck = (todo) => {
   })
     .then((res) => res.json())
     .then((json) => console.log(json))
-    .then(() => APIconect())
+    .then(() => GetTodo())
     .catch(() => alert("error"));
 };
 
@@ -68,7 +68,7 @@ const DeleteTodo = (DeleteTodo) => {
   })
     .then((res) => res.json())
     .then((json) => console.log(json))
-    .then(() => APIconect())
+    .then(() => GetTodo())
     .catch(() => alert("error"));
 };
 

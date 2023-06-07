@@ -29,7 +29,7 @@ export default function useAuth() {
 try {
   const decode = jwt_Decode(token);
   console.log("email " + decode.email);
-  setTodos(APIconect(decode.email));
+  setTodos(GetTodo(decode.email));
   console.log("state " + email);
   if (!email) {
     navigate("/user/login");

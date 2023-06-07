@@ -12,7 +12,8 @@ export default function Todo() {
   const [email, setEmail] = useState({});
   const navigate = useNavigate();
 
-  const APIconect = () => {
+  // apiサーバからユーザのTodoを取ってくる
+  const GetTodo = () => {
     fetch("https://todo-api-zu94.onrender.com", {
       method: "GET",
       headers: {
@@ -38,10 +39,10 @@ export default function Todo() {
       navigate("/user/login");
       return;
     }
-    APIconect();
+    GetTodo();
   }, []);
 
-  //Todosのステートにinputコンポから受け取った入力データをステートに追加する
+  //Todoの追加をapiサーバに
   const AddTodos = (Todo) => {
     fetch("https://todo-api-zu94.onrender.com/create", {
       method: "POST",
@@ -57,7 +58,7 @@ export default function Todo() {
     })
       .then((res) => res.json())
       .then((json) => console.log(json))
-      .then(() => APIconect())
+      .then(() => GetTodo())
       .catch(() => alert("error"));
   };
 
@@ -78,7 +79,7 @@ export default function Todo() {
     })
       .then((res) => res.json())
       .then((json) => console.log(json))
-      .then(() => APIconect())
+      .then(() => GetTodo())
       .catch(() => alert("error"));
   };
 
@@ -94,7 +95,7 @@ export default function Todo() {
     })
       .then((res) => res.json())
       .then((json) => console.log(json))
-      .then(() => APIconect())
+      .then(() => GetTodo())
       .catch(() => alert("error"));
   };
 
