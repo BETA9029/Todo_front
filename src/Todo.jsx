@@ -3,34 +3,22 @@ import CreateTodo from "./createTodo";
 import Header from "./Header";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-//import "react-native-get-random-values";
 import "bulma/css/bulma.css";
+import { useFetch } from "./hooks/useFetch";
 
 export default function Todo() {
-  const [Todos, setTodos] = useState([]);
   const [text, setText] = useState("");
-  const [email, setEmail] = useState({});
   const navigate = useNavigate();
 
-  // apiサーバからユーザのTodoを取ってくる
-  const GetTodo = () => {
-    fetch("https://todo-api-zu94.onrender.com", {
-      method: "GET",
-      headers: {
-        Accept: "aplication/json",
-        "Content-Type": "application/json",
-        token: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        setEmail(json.email);
-        setTodos(json.alltodo);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  const [data, loading, error, fetchTodos] = useFetch({
+    path: "",
+    method: "GET",
+    headers: {
+      Accept: "aplication/json",
+      "Content-Type": "application/json",
+      token: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
 
   //初回描画時のみローカルストレージからデータをロードし、ステートに保存
   useEffect(() => {
@@ -39,7 +27,6 @@ export default function Todo() {
       navigate("/user/login");
       return;
     }
-    GetTodo();
   }, []);
 
   //Todoの追加をapiサーバに
@@ -53,12 +40,12 @@ export default function Todo() {
       body: JSON.stringify({
         todo: text,
         done: "false",
-        email: email,
+        email: data.email,
       }),
     })
       .then((res) => res.json())
       .then((json) => console.log(json))
-      .then(() => GetTodo())
+      .then(() => fetchTodos())
       .catch(() => alert("error"));
   };
 
@@ -79,7 +66,7 @@ export default function Todo() {
     })
       .then((res) => res.json())
       .then((json) => console.log(json))
-      .then(() => GetTodo())
+      .then(() => fetchTodos())
       .catch(() => alert("error"));
   };
 
@@ -95,16 +82,19 @@ export default function Todo() {
     })
       .then((res) => res.json())
       .then((json) => console.log(json))
-      .then(() => GetTodo())
+      .then(() => fetchTodos())
       .catch(() => alert("error"));
   };
+
+  if (loading) return <p>loading...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div>
       <Header title="TODO" linkName="ログアウト" link="/user/login" />
 
       <InputTodo AddTodos={AddTodos} text={text} setText={setText} />
-      {Todos.map((todos) => (
+      {data.alltodo.map((todos) => (
         <CreateTodo
           key={todos._id}
           todo={todos}
