@@ -1,11 +1,11 @@
 import "bulma/css/bulma.css";
 
-export default function InputTodo(props) {
+export default function InputTodo({ text, setText, AddTodos }) {
   const enter = (e) => {
     if (e.key === "Enter") {
-      if (props.text === "") return;
-      props.AddTodos(props.text);
-      props.setText("");
+      if (text === "") return;
+      AddTodos(text);
+      setText("");
     }
   };
 
@@ -14,9 +14,9 @@ export default function InputTodo(props) {
       <input
         className="input is-primary"
         type="text"
-        value={props.text}
+        value={text}
         placeholder="Todoを追加"
-        onChange={(e) => props.setText(e.target.value)}
+        onChange={(e) => setText(e.target.value)}
         onKeyDown={enter}
       />
     </div>

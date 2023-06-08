@@ -1,17 +1,21 @@
 import InputTodo from "./InputTodo";
 import CreateTodo from "./createTodo";
 import Header from "./Header";
+import jwt_Decode from "jwt-decode";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-//import "react-native-get-random-values";
 import "bulma/css/bulma.css";
 
 export default function Todo() {
+  //サーバから受け取ったユーザのTodoを格納するステート
   const [Todos, setTodos] = useState([]);
+  //新たに追加したtodoを一時的に入れるためのステート、InputTodoコンポーネントに渡す
   const [text, setText] = useState("");
+  //ユーザのemailを格納するステート、
   const [email, setEmail] = useState({});
   const navigate = useNavigate();
 
+  //APIサーバにgetリクエスト送りユーザのtodoをもらい、ステートTodosに入れる
   const APIconect = () => {
     fetch("https://todo-api-zu94.onrender.com", {
       method: "GET",
@@ -23,7 +27,6 @@ export default function Todo() {
     })
       .then((res) => res.json())
       .then((json) => {
-        setEmail(json.email);
         setTodos(json.alltodo);
       })
       .catch((err) => {
@@ -31,18 +34,23 @@ export default function Todo() {
       });
   };
 
-  //初回描画時のみローカルストレージからデータをロードし、ステートに保存
+  //初回描時にtokenがローカルストレージにありそれが有効ならAPIconectを実行
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
       navigate("/user/login");
       return;
     }
+    const decode = jwt_Decode(token);
+    const userEmail = decode.email;
+    // console.log(LoginUser);
+    if (!userEmail) navigate("/user/login");
+    setEmail(userEmail);
     APIconect();
   }, []);
 
-  //Todosのステートにinputコンポから受け取った入力データをステートに追加する
-  const AddTodos = (Todo) => {
+  //追加されたさいにtodoをサーバにpostリクエストを送信し追加する。成功したらAPIconectを実行
+  const AddTodos = () => {
     fetch("https://todo-api-zu94.onrender.com/create", {
       method: "POST",
       headers: {
@@ -61,7 +69,7 @@ export default function Todo() {
       .catch(() => alert("error"));
   };
 
-  //指定されたIDの真偽の入れ替えをした配列をステートに入れなおす
+  //チェックボックスが押されたら、todoの真偽を変換しものをサーバにPUTリクエストを送信し編集する。成功したらAPIconectを実行
   const onCheck = (todo) => {
     console.log(`https://todo-api-zu94.onrender.com/update/${todo._id}`);
     fetch(`https://todo-api-zu94.onrender.com/update/${todo._id}`, {
@@ -82,7 +90,7 @@ export default function Todo() {
       .catch(() => alert("error"));
   };
 
-  //指定されたIDのデータを削除した配列をステートに入れなおす
+  //削除ボタンが押されたら、サーバにそのtodoのdeleteリクエストを送信。成功したらAPIconectを実行
   const DeleteTodo = (DeleteTodo) => {
     fetch(`https://todo-api-zu94.onrender.com/delete/${DeleteTodo._id}`, {
       method: "DELETE",
