@@ -1,14 +1,16 @@
 import InputTodo from "./InputTodo";
 import CreateTodo from "./createTodo";
 import Header from "./Header";
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import "bulma/css/bulma.css";
 import { useFetch } from "./hooks/useFetch";
+import { useTokenLogin } from "./hooks/useTokenLogin";
+//import { useAddTodo } from "./hooks/useAddTodo";
 
 export default function Todo() {
   const [text, setText] = useState("");
-  const navigate = useNavigate();
+
+  const email = useTokenLogin();
 
   const [data, loading, error, fetchTodos] = useFetch({
     path: "",
@@ -20,17 +22,8 @@ export default function Todo() {
     },
   });
 
-  //初回描画時のみローカルストレージからデータをロードし、ステートに保存
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/user/login");
-      return;
-    }
-  }, []);
-
-  //Todoの追加をapiサーバに
-  const AddTodos = (Todo) => {
+  //Todoの追加をapiサーバに;
+  const AddTodos = () => {
     fetch("https://todo-api-zu94.onrender.com/create", {
       method: "POST",
       headers: {
@@ -40,7 +33,7 @@ export default function Todo() {
       body: JSON.stringify({
         todo: text,
         done: "false",
-        email: data.email,
+        email: email,
       }),
     })
       .then((res) => res.json())

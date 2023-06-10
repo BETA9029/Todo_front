@@ -32,13 +32,15 @@ export const useFetch = ({ skip, ...rest }) => {
     dipatch({ actionType: "loading" });
 
     fetch("https://todo-api-zu94.onrender.com" + path, {
-      Accept: "aplication/json",
-      "Content-Type": "application/json",
+      // Accept: "aplication/json",
+      // "Content-Type": "application/json",
       ...options,
     })
-      .then((response) => response.json())
+      .then((res) => res.json())
       .then((value) => dipatch({ actionType: "setResponse", value }))
-      .catch((error) => dipatch({ actionType: "setError", value: error }));
+      .catch((error) => {
+        dipatch({ actionType: "setError", value: error });
+      });
   }, [args]);
 
   // 再取得関数
