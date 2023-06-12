@@ -1,5 +1,4 @@
 import { useEffect, useReducer, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const reducer = (preState, { actionType, value }) => {
   switch (actionType) {
@@ -16,9 +15,9 @@ const reducer = (preState, { actionType, value }) => {
   }
 };
 
-export const useFetch = ({ skip, ...rest }) => {
-  const navigate = useNavigate();
-  const [args, setArgs] = useState(rest);
+export const usePost = (skip, onComplete, Todo, email) => {
+  const [skipState, setSkip] = useState(skip);
+  const [args, setArgs] = useState(Todo);
   const [state, dipatch] = useReducer(reducer, {
     data: null,
     loading: true,
@@ -26,30 +25,38 @@ export const useFetch = ({ skip, ...rest }) => {
   });
 
   useEffect(() => {
-    const { path, ...options } = args;
+    // const { path, ...options } = args;
 
-    if (skip) return dipatch({ actionType: "loaded" });
+    if (skipState) return dipatch({ actionType: "loaded" });
 
     // ロード中にする
     dipatch({ actionType: "loading" });
 
-    fetch("https://todo-api-zu94.onrender.com" + path, {
-      // Accept: "aplication/json",
-      // "Content-Type": "application/json"
-      ...options,
+    fetch("https://todo-api-zu94.onrender.com/create", {
+      method: "POST",
+      headers: {
+        Accept: "aplication/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        todo: args,
+        done: "false",
+        email: email,
+      }),
     })
       .then((res) => res.json())
-      .then((value) =>
-        dipatch({ actionType: "setResponse", value: value.alltodo })
-      )
+      .then((value) => dipatch({ actionType: "setResponse", value }))
+      .then(() => onComplete())
       .catch((error) => {
         dipatch({ actionType: "setError", value: error });
-        navigate("/user/login");
       });
   }, [args]);
 
   // 再取得関数
-  const refetch = (reFetchArgs) => setArgs({ ...rest, ...reFetchArgs });
+  const refetch = (reFetchArgs) => {
+    setSkip(false);
+    setArgs(reFetchArgs);
+  };
 
   return [state.data, state.loading, state.error, refetch];
 };

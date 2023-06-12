@@ -1,7 +1,6 @@
 import InputTodo from "./InputTodo";
 import CreateTodo from "./createTodo";
 import Header from "./Header";
-import React, { useState } from "react";
 import "bulma/css/bulma.css";
 import { useFetch } from "./hooks/useFetch";
 import { useTokenLogin } from "./hooks/useTokenLogin";
@@ -64,7 +63,7 @@ export default function Todo() {
       <Header title="TODO" linkName="ログアウト" link="/user/login" />
 
       <InputTodo fetchTodos={fetchTodos} email={email} />
-      {data.alltodo.map((todos) => (
+      {data.map((todos) => (
         <CreateTodo
           key={todos._id}
           todo={todos}

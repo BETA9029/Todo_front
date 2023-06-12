@@ -1,6 +1,6 @@
 import jwt_Decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 
 export const useTokenLogin = () => {
   const [email, setEmail] = useState();
@@ -10,12 +10,16 @@ export const useTokenLogin = () => {
     const token = localStorage.getItem("token");
     if (!token) {
       navigate("/user/login");
-      return;
+      return null;
     }
     const decode = jwt_Decode(token);
     const userEmail = decode.email;
-    if (!userEmail) navigate("/user/login");
+    console.log(userEmail);
+    if (!userEmail) {
+      navigate("/user/login");
+      return null;
+    }
     setEmail(userEmail);
-  }, []);
+  }, [navigate]);
   return email;
 };
