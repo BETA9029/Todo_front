@@ -15,6 +15,7 @@ export const useTokenLogin = () => {
     const decode = jwt_Decode(token);
     const userEmail = decode.email;
     console.log(userEmail);
+    console.log(decode);
     if (!userEmail) {
       navigate("/user/login");
       return null;

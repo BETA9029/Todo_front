@@ -2,21 +2,23 @@ import InputTodo from "./InputTodo";
 import CreateTodo from "./createTodo";
 import Header from "./Header";
 import "bulma/css/bulma.css";
-import { useFetch } from "./hooks/useFetch";
+import { useGetTodo } from "./hooks/useGetTodo";
+//import { useFetch } from "./hooks/useFetch";
 import { useTokenLogin } from "./hooks/useTokenLogin";
 
 export default function Todo() {
   const email = useTokenLogin();
+  const [data, loading, error, fetchTodos] = useGetTodo();
 
-  const [data, loading, error, fetchTodos] = useFetch({
-    path: "",
-    method: "GET",
-    headers: {
-      Accept: "aplication/json",
-      "Content-Type": "application/json",
-      token: `Bearer ${localStorage.getItem("token")}`,
-    },
-  });
+  // const [data, loading, error, fetchTodos] = useFetch({
+  //   path: "",
+  //   method: "GET",
+  //   headers: {
+  //     Accept: "aplication/json",
+  //     "Content-Type": "application/json",
+  //     token: `Bearer ${localStorage.getItem("token")}`,
+  //   },
+  // });
 
   //指定されたIDの真偽の入れ替えをした配列をステートに入れなおす
   const onCheck = (todo) => {

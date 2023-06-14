@@ -16,9 +16,10 @@ const reducer = (preState, { actionType, value }) => {
   }
 };
 
-export const useFetch = ({ skip, ...rest }) => {
+export const useGetTodo = () => {
+  const token = { jwt: localStorage.getItem("token") };
   const navigate = useNavigate();
-  const [args, setArgs] = useState(rest);
+  const [args, setArgs] = useState(token);
   const [state, dipatch] = useReducer(reducer, {
     data: null,
     loading: true,
@@ -26,15 +27,16 @@ export const useFetch = ({ skip, ...rest }) => {
   });
 
   useEffect(() => {
-    const { path, ...options } = args;
-
-    if (skip) return dipatch({ actionType: "loaded" });
-
     // ロード中にする
     dipatch({ actionType: "loading" });
 
-    fetch("https://todo-api-zu94.onrender.com" + path, {
-      ...options,
+    fetch("https://todo-api-zu94.onrender.com", {
+      method: "GET",
+      headers: {
+        Accept: "aplication/json",
+        "Content-Type": "application/json",
+        token: `Bearer ${args.jwt}`,
+      },
     })
       .then((res) => res.json())
       .then((value) => {
@@ -48,7 +50,7 @@ export const useFetch = ({ skip, ...rest }) => {
   }, [args]);
 
   // 再取得関数
-  const refetch = (reFetchArgs) => setArgs({ ...rest, ...reFetchArgs });
+  const refetch = (reToken) => setArgs({ ...args, ...reToken });
 
   return [state.data, state.loading, state.error, refetch];
 };
